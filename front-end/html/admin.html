@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VMS — Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .role-line { width: 3px; height: 100%; position: absolute; left: 0; top: 0; border-radius: 2px; }
+  </style>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ── Sidebar ─────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">VendorFlow</div>
+      <div class="logo-sub">Management System</div>
+    </div>
+    <div class="role-badge admin"><i class="bi bi-shield-fill"></i> Admin</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard','nav-dashboard')">
+        <i class="bi bi-grid-1x2-fill"></i> Dashboard
+      </div>
+      <div class="nav-section-label">Users</div>
+      <div class="nav-item" id="nav-users" onclick="navigate('users','nav-users')">
+        <i class="bi bi-people-fill"></i> User Management
+      </div>
+      <div class="nav-section-label">Vendors</div>
+      <div class="nav-item" id="nav-vendors" onclick="navigate('vendors','nav-vendors')">
+        <i class="bi bi-building"></i> Vendors
+      </div>
+      <div class="nav-item" id="nav-vendor-status" onclick="navigate('vendor-status','nav-vendor-status')">
+        <i class="bi bi-check2-circle"></i> Approval Queue
+      </div>
+      <div class="nav-section-label">Finance & Contracts</div>
+      <div class="nav-item" id="nav-contracts" onclick="navigate('contracts','nav-contracts')">
+        <i class="bi bi-file-earmark-text-fill"></i> Contracts
+      </div>
+      <div class="nav-item" id="nav-invoices" onclick="navigate('invoices','nav-invoices')">
+        <i class="bi bi-receipt"></i> Invoices
+      </div>
+      <div class="nav-section-label">System</div>
+      <div class="nav-item" id="nav-notifications" onclick="navigate('notifications','nav-notifications')">
+        <i class="bi bi-bell-fill"></i> Notifications <span class="notif-dot"></span>
+      </div>
+      <div class="nav-item" id="nav-audit" onclick="navigate('audit','nav-audit')">
+        <i class="bi bi-journal-text"></i> Audit Log
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="sidebar-avatar">AM</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-user-name">Alex Morgan</div>
+        <div class="user-role" id="sidebar-user-role">Admin</div>
+      </div>
+      <button class="btn-logout" onclick="VMS.logout()" title="Logout"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+  </aside>
+
+  <!-- ── Main ───────────────────────────── -->
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary btn-sm" onclick="openModal('addUserModal')">
+          <i class="bi bi-plus-lg"></i> Add User
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="navigate('notifications','nav-notifications')">
+          <i class="bi bi-bell"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- ── DASHBOARD ───────────────────── -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card blue">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value">24</div>
+            <div class="stat-sub">↑ 3 added this month</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Active Vendors</div>
+            <div class="stat-value">18</div>
+            <div class="stat-sub">2 pending approval</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label">Open Contracts</div>
+            <div class="stat-value">12</div>
+            <div class="stat-sub">3 expiring in 30 days</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">Overdue Invoices</div>
+            <div class="stat-value">5</div>
+            <div class="stat-sub">Total $48,200</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-label">Monthly Spend</div>
+            <div class="stat-value">$284K</div>
+            <div class="stat-sub">↑ 8% vs last month</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="table-container">
+            <div class="table-header">
+              <div class="table-title">Recent Activity</div>
+            </div>
+            <ul class="timeline" style="padding:16px 20px">
+              <li>
+                <div class="tl-dot" style="background:rgba(79,142,247,.15);color:#4f8ef7"><i class="bi bi-person-plus-fill"></i></div>
+                <div class="tl-content">
+                  <div class="tl-title">New vendor TechFlow Inc. registered</div>
+                  <div class="tl-time">2 hours ago</div>
+                </div>
+              </li>
+              <li>
+                <div class="tl-dot" style="background:rgba(46,204,122,.15);color:#2ecc7a"><i class="bi bi-check-circle-fill"></i></div>
+                <div class="tl-content">
+                  <div class="tl-title">Contract #C-042 approved by manager</div>
+                  <div class="tl-time">4 hours ago</div>
+                </div>
+              </li>
+              <li>
+                <div class="tl-dot" style="background:rgba(245,166,35,.15);color:#f5a623"><i class="bi bi-receipt"></i></div>
+                <div class="tl-content">
+                  <div class="tl-title">Invoice #INV-089 issued by CloudHost Ltd</div>
+                  <div class="tl-time">Yesterday</div>
+                </div>
+              </li>
+              <li>
+                <div class="tl-dot" style="background:rgba(232,84,84,.15);color:#e85454"><i class="bi bi-exclamation-circle-fill"></i></div>
+                <div class="tl-content">
+                  <div class="tl-title">Payment overdue for PO #PO-017</div>
+                  <div class="tl-time">2 days ago</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="table-container">
+            <div class="table-header">
+              <div class="table-title">Vendor Performance</div>
+            </div>
+            <div style="padding:16px 20px">
+              <div id="perfList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── USERS ───────────────────────── -->
+      <div class="panel" id="panel-users">
+        <div class="section-heading">
+          <h3>User Management</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addUserModal')">
+            <i class="bi bi-plus-lg"></i> Add User
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── VENDORS ─────────────────────── -->
+      <div class="panel" id="panel-vendors">
+        <div class="section-heading">
+          <h3>All Vendors</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addVendorModal')">
+            <i class="bi bi-plus-lg"></i> Add Vendor
+          </button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr><th>Vendor</th><th>Type</th><th>Contact</th><th>Contracts</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="vendorTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── APPROVAL QUEUE ──────────────── -->
+      <div class="panel" id="panel-vendor-status">
+        <div class="section-heading"><h3>Vendor Approval Queue</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Type</th><th>Submitted</th><th>Documents</th><th>Actions</th></tr></thead>
+            <tbody id="approvalTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── CONTRACTS ───────────────────── -->
+      <div class="panel" id="panel-contracts">
+        <div class="section-heading"><h3>Contracts</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('addContractModal')"><i class="bi bi-plus-lg"></i> New Contract</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Contract ID</th><th>Vendor</th><th>Value</th><th>Start</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="contractTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── INVOICES ────────────────────── -->
+      <div class="panel" id="panel-invoices">
+        <div class="section-heading"><h3>Invoices</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Invoice ID</th><th>Vendor</th><th>Contract</th><th>Amount</th><th>Due Date</th><th>Status</th></tr></thead>
+            <tbody id="invoiceTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── NOTIFICATIONS ───────────────── -->
+      <div class="panel" id="panel-notifications">
+        <div class="section-heading"><h3>System Notifications</h3></div>
+        <div id="notifList" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+
+      <!-- ── AUDIT LOG ───────────────────── -->
+      <div class="panel" id="panel-audit">
+        <div class="section-heading"><h3>Audit Log</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Timestamp</th><th>User</th><th>Role</th><th>Action</th><th>Module</th></tr></thead>
+            <tbody id="auditTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /page-body -->
+  </div><!-- /main-content -->
+</div><!-- /app-layout -->
+
+<!-- ── MODALS ──────────────────────────────── -->
+
+<!-- Add User Modal -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Add New User</div>
+      <button class="modal-close" onclick="closeModal('addUserModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-control" placeholder="John Doe" id="newUserName"></div>
+      <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-control" placeholder="jdoe" id="newUserUsername"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-control" placeholder="john@company.com" id="newUserEmail"></div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Role</label>
+        <select class="form-control" id="newUserRole">
+          <option value="admin">Admin</option>
+          <option value="manager">Manager</option>
+          <option value="vendor">Vendor</option>
+          <option value="finance">Finance Officer</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-control" placeholder="••••••••" id="newUserPass"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addUser()"><i class="bi bi-check-lg"></i> Create User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Vendor Modal -->
+<div class="modal-overlay" id="addVendorModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Add New Vendor</div>
+      <button class="modal-close" onclick="closeModal('addVendorModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Company Name</label><input type="text" class="form-control" placeholder="Vendor Inc." id="newVendorName"></div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Type</label>
+        <select class="form-control" id="newVendorType">
+          <option>Cloud</option><option>ISP</option><option>Hardware</option><option>Software</option><option>Consulting</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Contact Email</label><input type="email" class="form-control" id="newVendorEmail" placeholder="vendor@co.com"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('addVendorModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addVendor()"><i class="bi bi-check-lg"></i> Add Vendor</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Contract Modal -->
+<div class="modal-overlay" id="addContractModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">New Contract</div>
+      <button class="modal-close" onclick="closeModal('addContractModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Vendor</label>
+      <select class="form-control" id="newContractVendor">
+        <option>TechFlow Inc.</option><option>CloudHost Ltd</option><option>NetServe Co</option>
+      </select>
+    </div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Contract Value ($)</label><input type="number" class="form-control" id="newContractValue" placeholder="50000"></div>
+      <div class="form-group"><label class="form-label">Start Date</label><input type="date" class="form-control" id="newContractStart"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Expiry Date</label><input type="date" class="form-control" id="newContractExpiry"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('addContractModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addContract()">Create Contract</button>
+    </div>
+  </div>
+</div>
+
+<script src="../vms-auth.js"></script>
+<script>
+const user = VMS.requireAuth('admin');
+if (user) VMS.renderSidebarUser(user);
+VMS.initAppLayout();
+
+// ── Data ───────────────────────────────────
+let users = [
+  { id:1, name:'Alex Morgan',    username:'admin',   email:'admin@vms.io',   role:'admin',   status:'active' },
+  { id:2, name:'Sarah Chen',     username:'manager', email:'schen@vms.io',   role:'manager', status:'active' },
+  { id:3, name:'TechFlow Inc.',  username:'vendor',  email:'vendor@vms.io',  role:'vendor',  status:'active' },
+  { id:4, name:'Omar Hassan',    username:'finance', email:'ohassan@vms.io', role:'finance', status:'active' },
+  { id:5, name:'Priya Kapoor',   username:'pkapoor', email:'pk@vms.io',      role:'manager', status:'inactive' },
+];
+
+let vendors = [
+  { id:1, name:'TechFlow Inc.',  type:'Cloud',     contact:'vendor@vms.io',  contracts:3, status:'active' },
+  { id:2, name:'CloudHost Ltd',  type:'ISP',       contact:'ch@cloud.io',    contracts:2, status:'active' },
+  { id:3, name:'NetServe Co',    type:'Hardware',  contact:'ns@netserve.io', contracts:1, status:'suspended' },
+  { id:4, name:'DataSoft LLC',   type:'Software',  contact:'ds@soft.io',     contracts:4, status:'active' },
+];
+
+let pendingVendors = [
+  { id:5, name:'AlphaCloud',     type:'Cloud',    submitted:'2026-05-28', docs:'3 / 5' },
+  { id:6, name:'BuildMax Corp',  type:'Hardware', submitted:'2026-05-30', docs:'5 / 5' },
+];
+
+let contracts = [
+  { id:'C-041', vendor:'TechFlow Inc.',  value:120000, start:'2025-01-01', expiry:'2026-12-31', status:'active' },
+  { id:'C-042', vendor:'CloudHost Ltd', value:48000,  start:'2025-06-01', expiry:'2026-05-31', status:'active' },
+  { id:'C-043', vendor:'NetServe Co',   value:22000,  start:'2025-03-01', expiry:'2026-03-01', status:'expired' },
+  { id:'C-044', vendor:'DataSoft LLC',  value:75000,  start:'2026-01-01', expiry:'2027-01-01', status:'active' },
+];
+
+let invoices = [
+  { id:'INV-081', vendor:'TechFlow Inc.',  contract:'C-041', amount:10000, due:'2026-06-15', status:'pending' },
+  { id:'INV-082', vendor:'CloudHost Ltd', contract:'C-042', amount:4000,  due:'2026-05-30', status:'overdue' },
+  { id:'INV-083', vendor:'DataSoft LLC',  contract:'C-044', amount:6250,  due:'2026-07-01', status:'paid'    },
+  { id:'INV-084', vendor:'TechFlow Inc.',  contract:'C-041', amount:10000, due:'2026-07-15', status:'pending' },
+];
+
+let notifs = [
+  { type:'warning', icon:'bi-clock',         title:'Contract C-043 expired',            time:'1 day ago' },
+  { type:'danger',  icon:'bi-exclamation',    title:'Invoice INV-082 is overdue',        time:'3 days ago' },
+  { type:'info',    icon:'bi-person-plus',    title:'New vendor AlphaCloud submitted',   time:'5 days ago' },
+  { type:'success', icon:'bi-check-circle',   title:'Contract C-042 approved',           time:'1 week ago' },
+];
+
+let auditLog = [
+  { time:'2026-06-03 09:14', user:'admin',   role:'Admin',   action:'Created contract C-044',         module:'Contracts'    },
+  { time:'2026-06-03 08:52', user:'manager', role:'Manager', action:'Assigned task to TechFlow Inc.', module:'Tasks'        },
+  { time:'2026-06-02 17:30', user:'finance', role:'Finance', action:'Processed payment INV-083',      module:'Finance'      },
+  { time:'2026-06-02 15:10', user:'admin',   role:'Admin',   action:'Approved vendor DataSoft LLC',   module:'Vendors'      },
+  { time:'2026-06-01 11:00', user:'vendor',  role:'Vendor',  action:'Submitted Invoice INV-084',      module:'Invoices'     },
+];
+
+const roleColors = { admin:'var(--admin-color)', vendor:'var(--vendor-color)', manager:'var(--manager-color)', finance:'var(--finance-color)' };
+const statusBadge = s => {
+  const m = { active:'badge-success', inactive:'badge-muted', suspended:'badge-danger', expired:'badge-danger', pending:'badge-info', overdue:'badge-danger', paid:'badge-success' };
+  return `<span class="badge ${m[s]||'badge-muted'}">${s}</span>`;
+};
+
+// ── Renderers ──────────────────────────────
+function renderUsers() {
+  document.getElementById('userTableBody').innerHTML = users.map(u => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:8px;background:${roleColors[u.role]}22;color:${roleColors[u.role]};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">${VMS.getInitials(u.name)}</div>
+        <span style="font-weight:500">${u.name}</span>
+      </div></td>
+      <td class="text-muted">${u.username}</td>
+      <td class="text-muted">${u.email}</td>
+      <td><span class="badge" style="background:${roleColors[u.role]}22;color:${roleColors[u.role]}">${u.role}</span></td>
+      <td>${statusBadge(u.status)}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-outline btn-sm btn-icon" title="Edit"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteUser(${u.id})" title="Delete"><i class="bi bi-trash"></i></button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderVendors() {
+  document.getElementById('vendorTableBody').innerHTML = vendors.map(v => `
+    <tr>
+      <td style="font-weight:500">${v.name}</td>
+      <td><span class="badge badge-info">${v.type}</span></td>
+      <td class="text-muted">${v.contact}</td>
+      <td>${v.contracts}</td>
+      <td>${statusBadge(v.status)}</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-outline btn-sm btn-icon"><i class="bi bi-eye"></i></button>
+        <button class="btn btn-danger btn-sm btn-icon" onclick="deleteVendor(${v.id})"><i class="bi bi-trash"></i></button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderApprovals() {
+  document.getElementById('approvalTableBody').innerHTML = pendingVendors.map(v => `
+    <tr>
+      <td style="font-weight:500">${v.name}</td>
+      <td><span class="badge badge-info">${v.type}</span></td>
+      <td class="text-muted">${v.submitted}</td>
+      <td class="text-muted">${v.docs} docs</td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn-success btn-sm" onclick="approveVendor(${v.id})"><i class="bi bi-check-lg"></i> Approve</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectVendor(${v.id})"><i class="bi bi-x-lg"></i> Reject</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function renderContracts() {
+  document.getElementById('contractTableBody').innerHTML = contracts.map(c => `
+    <tr>
+      <td style="font-weight:600;color:var(--accent)">${c.id}</td>
+      <td>${c.vendor}</td>
+      <td>$${c.value.toLocaleString()}</td>
+      <td class="text-muted">${c.start}</td>
+      <td class="text-muted">${c.expiry}</td>
+      <td>${statusBadge(c.status)}</td>
+      <td><button class="btn btn-outline btn-sm btn-icon"><i class="bi bi-eye"></i></button></td>
+    </tr>`).join('');
+}
+
+function renderInvoices() {
+  document.getElementById('invoiceTableBody').innerHTML = invoices.map(i => `
+    <tr>
+      <td style="font-weight:600;color:var(--accent)">${i.id}</td>
+      <td>${i.vendor}</td>
+      <td class="text-muted">${i.contract}</td>
+      <td>$${i.amount.toLocaleString()}</td>
+      <td class="text-muted">${i.due}</td>
+      <td>${statusBadge(i.status)}</td>
+    </tr>`).join('');
+}
+
+function renderNotifications() {
+  const colors = { warning:'var(--warning)', danger:'var(--danger)', info:'var(--accent)', success:'var(--success)' };
+  document.getElementById('notifList').innerHTML = notifs.map(n => `
+    <div class="card" style="display:flex;align-items:center;gap:14px;padding:14px 18px">
+      <div style="width:36px;height:36px;border-radius:9px;background:${colors[n.type]}22;color:${colors[n.type]};display:flex;align-items:center;justify-content:center;font-size:16px">
+        <i class="bi ${n.icon}"></i>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:500">${n.title}</div>
+        <div class="text-muted" style="font-size:11px;margin-top:2px">${n.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderAuditLog() {
+  const roleC = { Admin:'var(--admin-color)', Manager:'var(--manager-color)', Finance:'var(--finance-color)', Vendor:'var(--vendor-color)' };
+  document.getElementById('auditTableBody').innerHTML = auditLog.map(a => `
+    <tr>
+      <td class="text-muted" style="font-size:12px">${a.time}</td>
+      <td style="font-weight:500">${a.user}</td>
+      <td><span class="badge" style="background:${roleC[a.role]}22;color:${roleC[a.role]}">${a.role}</span></td>
+      <td>${a.action}</td>
+      <td><span class="badge badge-muted">${a.module}</span></td>
+    </tr>`).join('');
+}
+
+function renderPerf() {
+  const perfs = [
+    { name:'TechFlow Inc.',  score:92, color:'var(--success)' },
+    { name:'CloudHost Ltd',  score:78, color:'var(--accent)' },
+    { name:'DataSoft LLC',   score:85, color:'var(--success)' },
+    { name:'NetServe Co',    score:54, color:'var(--warning)' },
+  ];
+  document.getElementById('perfList').innerHTML = perfs.map(p => `
+    <div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+        <span style="font-size:13px;font-weight:500">${p.name}</span>
+        <span style="font-size:13px;font-weight:700;color:${p.color}">${p.score}%</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar" style="width:${p.score}%;background:${p.color}"></div></div>
+    </div>`).join('');
+}
+
+// ── Actions ────────────────────────────────
+function addUser() {
+  const name = document.getElementById('newUserName').value.trim();
+  const username = document.getElementById('newUserUsername').value.trim();
+  const email = document.getElementById('newUserEmail').value.trim();
+  const role = document.getElementById('newUserRole').value;
+  if (!name || !username) { showToast('Please fill required fields', 'error'); return; }
+  users.push({ id: Date.now(), name, username, email, role, status: 'active' });
+  renderUsers();
+  closeModal('addUserModal');
+  showToast('User created successfully');
+}
+
+function deleteUser(id) {
+  if (!confirm('Delete this user?')) return;
+  users = users.filter(u => u.id !== id);
+  renderUsers();
+  showToast('User deleted', 'warning');
+}
+
+function addVendor() {
+  const name = document.getElementById('newVendorName').value.trim();
+  const type = document.getElementById('newVendorType').value;
+  const contact = document.getElementById('newVendorEmail').value.trim();
+  if (!name) { showToast('Enter vendor name', 'error'); return; }
+  vendors.push({ id: Date.now(), name, type, contact, contracts: 0, status: 'active' });
+  renderVendors();
+  closeModal('addVendorModal');
+  showToast('Vendor added');
+}
+
+function deleteVendor(id) {
+  if (!confirm('Remove this vendor?')) return;
+  vendors = vendors.filter(v => v.id !== id);
+  renderVendors();
+  showToast('Vendor removed', 'warning');
+}
+
+function approveVendor(id) {
+  const v = pendingVendors.find(p => p.id === id);
+  vendors.push({ id, name: v.name, type: v.type, contact:'-', contracts:0, status:'active' });
+  pendingVendors = pendingVendors.filter(p => p.id !== id);
+  renderApprovals();
+  showToast(`${v.name} approved`);
+}
+
+function rejectVendor(id) {
+  const v = pendingVendors.find(p => p.id === id);
+  pendingVendors = pendingVendors.filter(p => p.id !== id);
+  renderApprovals();
+  showToast(`${v.name} rejected`, 'warning');
+}
+
+function addContract() {
+  const vendor = document.getElementById('newContractVendor').value;
+  const value = parseInt(document.getElementById('newContractValue').value) || 0;
+  const start = document.getElementById('newContractStart').value;
+  const expiry = document.getElementById('newContractExpiry').value;
+  const id = 'C-0' + (contracts.length + 45);
+  contracts.push({ id, vendor, value, start, expiry, status: 'active' });
+  renderContracts();
+  closeModal('addContractModal');
+  showToast('Contract created');
+}
+
+// ── Navigation ─────────────────────────────
+const titles = {
+  dashboard:'Dashboard', users:'User Management', vendors:'All Vendors',
+  'vendor-status':'Approval Queue', contracts:'Contracts', invoices:'Invoices',
+  notifications:'Notifications', audit:'Audit Log'
+};
+
+function navigate(panel, navId) {
+  VMS.navigate(panel, navId, titles);
+}
+
+// ── Init ───────────────────────────────────
+renderUsers();
+renderVendors();
+renderApprovals();
+renderContracts();
+renderInvoices();
+renderNotifications();
+renderAuditLog();
+renderPerf();
+</script>
+</body>
+</html>

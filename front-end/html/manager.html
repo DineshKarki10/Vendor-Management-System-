@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VMS — Manager Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">VendorFlow</div>
+      <div class="logo-sub">Manager Console</div>
+    </div>
+    <div class="role-badge manager"><i class="bi bi-person-check-fill"></i> Manager</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard','nav-dashboard')">
+        <i class="bi bi-grid-1x2-fill"></i> Dashboard
+      </div>
+      <div class="nav-section-label">Task Management</div>
+      <div class="nav-item" id="nav-assign" onclick="navigate('assign','nav-assign')">
+        <i class="bi bi-person-lines-fill"></i> Assign Tasks
+      </div>
+      <div class="nav-item" id="nav-requests" onclick="navigate('requests','nav-requests')">
+        <i class="bi bi-inbox-fill"></i> Vendor Requests <span class="notif-dot"></span>
+      </div>
+      <div class="nav-item" id="nav-tasks" onclick="navigate('tasks','nav-tasks')">
+        <i class="bi bi-list-task"></i> All Tasks
+      </div>
+      <div class="nav-section-label">Vendors</div>
+      <div class="nav-item" id="nav-vendors" onclick="navigate('vendors','nav-vendors')">
+        <i class="bi bi-building"></i> Vendor Overview
+      </div>
+      <div class="nav-item" id="nav-reviews" onclick="navigate('reviews','nav-reviews')">
+        <i class="bi bi-star-half"></i> Performance Reviews
+      </div>
+      <div class="nav-section-label">Contracts</div>
+      <div class="nav-item" id="nav-contracts" onclick="navigate('contracts','nav-contracts')">
+        <i class="bi bi-file-earmark-text-fill"></i> Contracts
+      </div>
+      <div class="nav-item" id="nav-pos" onclick="navigate('pos','nav-pos')">
+        <i class="bi bi-cart-fill"></i> Purchase Orders
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="sidebar-avatar">SC</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-user-name">Sarah Chen</div>
+        <div class="user-role" id="sidebar-user-role">Manager</div>
+      </div>
+      <button class="btn-logout" onclick="VMS.logout()"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary btn-sm" onclick="openModal('assignModal')">
+          <i class="bi bi-plus-lg"></i> Assign Task
+        </button>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card green">
+            <div class="stat-label">Active Vendors</div>
+            <div class="stat-value">18</div>
+            <div class="stat-sub">Under management</div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-label">Tasks In Progress</div>
+            <div class="stat-value">11</div>
+            <div class="stat-sub">3 due this week</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label">Pending Requests</div>
+            <div class="stat-value">4</div>
+            <div class="stat-sub">From vendors</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-label">Contracts Managed</div>
+            <div class="stat-value">12</div>
+            <div class="stat-sub">3 expiring soon</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="table-container">
+            <div class="table-header"><div class="table-title">Upcoming Deadlines</div></div>
+            <table>
+              <thead><tr><th>Task</th><th>Vendor</th><th>Due</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:500">Cloud Migration P2</td><td class="text-muted">TechFlow</td><td class="text-danger" style="font-weight:500">Jun 10</td><td><span class="badge badge-info">In Progress</span></td></tr>
+                <tr><td style="font-weight:500">Network Expansion</td><td class="text-muted">NetServe</td><td class="text-muted">Jun 18</td><td><span class="badge badge-muted">Pending</span></td></tr>
+                <tr><td style="font-weight:500">API Integration</td><td class="text-muted">TechFlow</td><td class="text-muted">Jun 20</td><td><span class="badge badge-info">In Progress</span></td></tr>
+                <tr><td style="font-weight:500">Hardware Refresh</td><td class="text-muted">NetServe</td><td class="text-muted">Jun 25</td><td><span class="badge badge-muted">Not Started</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-container">
+            <div class="table-header"><div class="table-title">Pending Vendor Requests</div></div>
+            <table>
+              <thead><tr><th>Vendor</th><th>Request</th><th>Priority</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td class="text-muted">TechFlow</td><td>Security Audit Access</td><td><span class="badge badge-danger">High</span></td>
+                  <td><div style="display:flex;gap:4px"><button class="btn btn-success btn-sm" onclick="showToast('Request approved')">✓</button><button class="btn btn-danger btn-sm" onclick="showToast('Request declined','warning')">✕</button></div></td></tr>
+                <tr><td class="text-muted">DataSoft</td><td>Additional Resources</td><td><span class="badge badge-warning">Med</span></td>
+                  <td><div style="display:flex;gap:4px"><button class="btn btn-success btn-sm" onclick="showToast('Request approved')">✓</button><button class="btn btn-danger btn-sm" onclick="showToast('Request declined','warning')">✕</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGN TASKS -->
+      <div class="panel" id="panel-assign">
+        <div class="section-heading"><h3>Assign New Task</h3></div>
+        <div class="card" style="max-width:600px;margin-bottom:24px">
+          <div class="form-group"><label class="form-label">Task Title</label><input type="text" class="form-control" id="taskTitle" placeholder="e.g. Network infrastructure upgrade"></div>
+          <div class="grid-2">
+            <div class="form-group"><label class="form-label">Assign To (Vendor)</label>
+              <select class="form-control" id="taskVendor">
+                <option>TechFlow Inc.</option><option>CloudHost Ltd</option><option>NetServe Co</option><option>DataSoft LLC</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Priority</label>
+              <select class="form-control" id="taskPrio">
+                <option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label class="form-label">Start Date</label><input type="date" class="form-control" id="taskStart"></div>
+            <div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-control" id="taskDeadline"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Description</label><textarea class="form-control" rows="3" placeholder="Task details..." id="taskDesc"></textarea></div>
+          <button class="btn btn-primary" onclick="assignTask()"><i class="bi bi-send"></i> Assign Task</button>
+        </div>
+      </div>
+
+      <!-- VENDOR REQUESTS -->
+      <div class="panel" id="panel-requests">
+        <div class="section-heading"><h3>Vendor Requests</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Request</th><th>Category</th><th>Priority</th><th>Submitted</th><th>Actions</th></tr></thead>
+            <tbody id="requestsBody">
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td>Security Audit Access</td><td><span class="badge badge-info">Security</span></td><td><span class="badge badge-danger">High</span></td><td class="text-muted">Jun 1</td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-success btn-sm" onclick="this.closest('tr').remove();showToast('Approved & task assigned')">Approve</button><button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove();showToast('Request declined','warning')">Decline</button></div></td></tr>
+              <tr><td style="font-weight:500">DataSoft LLC</td><td>Additional Dev Resources</td><td><span class="badge badge-info">Consulting</span></td><td><span class="badge badge-warning">Medium</span></td><td class="text-muted">Jun 2</td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-success btn-sm" onclick="this.closest('tr').remove();showToast('Approved & task assigned')">Approve</button><button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove();showToast('Request declined','warning')">Decline</button></div></td></tr>
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td>Cloud Storage Expansion</td><td><span class="badge badge-info">Infrastructure</span></td><td><span class="badge badge-warning">Medium</span></td><td class="text-muted">Jun 3</td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-success btn-sm" onclick="this.closest('tr').remove();showToast('Approved & task assigned')">Approve</button><button class="btn btn-danger btn-sm" onclick="this.closest('tr').remove();showToast('Request declined','warning')">Decline</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ALL TASKS -->
+      <div class="panel" id="panel-tasks">
+        <div class="section-heading"><h3>All Tasks</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('assignModal')"><i class="bi bi-plus-lg"></i> New Task</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Task</th><th>Assigned To</th><th>Priority</th><th>Deadline</th><th>Status</th><th>Update Status</th></tr></thead>
+            <tbody id="allTasksBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VENDORS -->
+      <div class="panel" id="panel-vendors">
+        <div class="section-heading"><h3>Vendor Overview</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Type</th><th>Active Tasks</th><th>Performance</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td><span class="badge badge-info">Cloud</span></td><td>4</td><td><span style="color:var(--success);font-weight:700">92%</span></td><td><span class="badge badge-success">Active</span></td></tr>
+              <tr><td style="font-weight:500">CloudHost Ltd</td><td><span class="badge badge-info">ISP</span></td><td>2</td><td><span style="color:var(--accent);font-weight:700">78%</span></td><td><span class="badge badge-success">Active</span></td></tr>
+              <tr><td style="font-weight:500">DataSoft LLC</td><td><span class="badge badge-info">Software</span></td><td>3</td><td><span style="color:var(--success);font-weight:700">85%</span></td><td><span class="badge badge-success">Active</span></td></tr>
+              <tr><td style="font-weight:500">NetServe Co</td><td><span class="badge badge-info">Hardware</span></td><td>1</td><td><span style="color:var(--warning);font-weight:700">54%</span></td><td><span class="badge badge-danger">Suspended</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PERFORMANCE REVIEWS -->
+      <div class="panel" id="panel-reviews">
+        <div class="section-heading"><h3>Performance Reviews</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('reviewModal')"><i class="bi bi-plus-lg"></i> Add Review</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Period</th><th>Delivery</th><th>Quality</th><th>Responsiveness</th><th>Overall</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td class="text-muted">Q1 2026</td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:95%;background:var(--success)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:88%;background:var(--success)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:91%;background:var(--accent)"></div></div></td>
+                <td><span style="color:var(--success);font-weight:700">92%</span></td></tr>
+              <tr><td style="font-weight:500">CloudHost Ltd</td><td class="text-muted">Q1 2026</td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:80%;background:var(--accent)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:75%;background:var(--accent)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:79%;background:var(--accent)"></div></div></td>
+                <td><span style="color:var(--accent);font-weight:700">78%</span></td></tr>
+              <tr><td style="font-weight:500">NetServe Co</td><td class="text-muted">Q1 2026</td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:55%;background:var(--warning)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:50%;background:var(--warning)"></div></div></td>
+                <td><div class="progress-bar-wrap" style="width:80px"><div class="progress-bar" style="width:58%;background:var(--warning)"></div></div></td>
+                <td><span style="color:var(--warning);font-weight:700">54%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CONTRACTS -->
+      <div class="panel" id="panel-contracts">
+        <div class="section-heading"><h3>Contracts</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>ID</th><th>Vendor</th><th>Value</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent);font-weight:600">C-041</td><td>TechFlow Inc.</td><td>$120,000</td><td class="text-muted">Dec 31, 2026</td><td><span class="badge badge-success">Active</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">View</button><button class="btn btn-warning btn-sm" onclick="showToast('Contract renewal initiated','info')">Renew</button></div></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">C-042</td><td>CloudHost Ltd</td><td>$48,000</td><td class="text-muted">May 31, 2026</td><td><span class="badge badge-warning">Expiring Soon</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">View</button><button class="btn btn-warning btn-sm" onclick="showToast('Contract renewal initiated','info')">Renew</button></div></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">C-043</td><td>NetServe Co</td><td>$22,000</td><td class="text-muted">Mar 1, 2026</td><td><span class="badge badge-danger">Expired</span></td>
+                <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm">View</button><button class="btn btn-primary btn-sm" onclick="showToast('New contract drafted','info')">Renew</button></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PURCHASE ORDERS -->
+      <div class="panel" id="panel-pos">
+        <div class="section-heading"><h3>Purchase Orders</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('poModal')"><i class="bi bi-plus-lg"></i> New PO</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>PO ID</th><th>Vendor</th><th>Description</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent);font-weight:600">PO-017</td><td>TechFlow Inc.</td><td>Server hardware batch</td><td>$32,000</td><td class="text-muted">May 20, 2026</td><td><span class="badge badge-warning">Pending Payment</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">PO-016</td><td>DataSoft LLC</td><td>License renewals Q2</td><td>$18,000</td><td class="text-muted">May 14, 2026</td><td><span class="badge badge-success">Paid</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">PO-015</td><td>CloudHost Ltd</td><td>Bandwidth upgrade</td><td>$8,000</td><td class="text-muted">Apr 30, 2026</td><td><span class="badge badge-success">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Assign Task Modal -->
+<div class="modal-overlay" id="assignModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Assign Task</div>
+      <button class="modal-close" onclick="closeModal('assignModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Task Title</label><input type="text" class="form-control" id="mTaskTitle" placeholder="Task title"></div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Vendor</label>
+        <select class="form-control" id="mTaskVendor">
+          <option>TechFlow Inc.</option><option>CloudHost Ltd</option><option>NetServe Co</option><option>DataSoft LLC</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Priority</label>
+        <select class="form-control" id="mTaskPrio">
+          <option>Low</option><option selected>Medium</option><option>High</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Deadline</label><input type="date" class="form-control" id="mTaskDeadline"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('assignModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="assignFromModal()">Assign</button>
+    </div>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Add Performance Review</div>
+      <button class="modal-close" onclick="closeModal('reviewModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Vendor</label>
+      <select class="form-control"><option>TechFlow Inc.</option><option>CloudHost Ltd</option><option>DataSoft LLC</option></select>
+    </div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Delivery (1-100)</label><input type="number" class="form-control" placeholder="90" min="0" max="100"></div>
+      <div class="form-group"><label class="form-label">Quality (1-100)</label><input type="number" class="form-control" placeholder="85" min="0" max="100"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Responsiveness (1-100)</label><input type="number" class="form-control" placeholder="88" min="0" max="100"></div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" rows="2" placeholder="Review comments..."></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('reviewModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('reviewModal');showToast('Review submitted')">Submit Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- PO Modal -->
+<div class="modal-overlay" id="poModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">New Purchase Order</div>
+      <button class="modal-close" onclick="closeModal('poModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Vendor</label>
+      <select class="form-control"><option>TechFlow Inc.</option><option>CloudHost Ltd</option><option>DataSoft LLC</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><input type="text" class="form-control" placeholder="What is being purchased?"></div>
+    <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" class="form-control" placeholder="10000"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('poModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('poModal');showToast('Purchase Order created')">Create PO</button>
+    </div>
+  </div>
+</div>
+
+<script src="../vms-auth.js"></script>
+<script>
+const user = VMS.requireAuth('manager');
+if (user) VMS.renderSidebarUser(user);
+VMS.initAppLayout();
+
+const titles = {
+  dashboard:'Dashboard', assign:'Assign Tasks', requests:'Vendor Requests', tasks:'All Tasks',
+  vendors:'Vendor Overview', reviews:'Performance Reviews', contracts:'Contracts', pos:'Purchase Orders'
+};
+
+function navigate(panel, navId) {
+  VMS.navigate(panel, navId, titles);
+}
+
+let taskList = [
+  { id:1, title:'Cloud Migration Phase 2', vendor:'TechFlow Inc.',  prio:'High',   deadline:'2026-06-10', status:'In Progress' },
+  { id:2, title:'API Integration Setup',   vendor:'TechFlow Inc.',  prio:'Medium', deadline:'2026-06-20', status:'In Progress' },
+  { id:3, title:'Network Expansion',       vendor:'NetServe Co',    prio:'Medium', deadline:'2026-06-18', status:'Pending'     },
+  { id:4, title:'Hardware Refresh',        vendor:'NetServe Co',    prio:'Low',    deadline:'2026-06-25', status:'Not Started' },
+  { id:5, title:'License Renewal',         vendor:'DataSoft LLC',   prio:'Low',    deadline:'2026-06-30', status:'Completed'   },
+];
+
+const prioBadge = p => ({ High:'badge-danger', Medium:'badge-warning', Low:'badge-muted', Critical:'badge-danger' })[p] || 'badge-muted';
+const statusMap  = { 'In Progress':'badge-info', 'Pending':'badge-muted', 'Not Started':'badge-muted', 'Completed':'badge-success' };
+
+function renderTasks() {
+  document.getElementById('allTasksBody').innerHTML = taskList.map(t => `
+    <tr>
+      <td style="font-weight:500">${t.title}</td>
+      <td class="text-muted">${t.vendor}</td>
+      <td><span class="badge ${prioBadge(t.prio)}">${t.prio}</span></td>
+      <td class="text-muted">${t.deadline}</td>
+      <td><span class="badge ${statusMap[t.status]||'badge-muted'}">${t.status}</span></td>
+      <td>
+        <select class="form-control" style="width:140px;padding:4px 8px;font-size:12px" onchange="updateStatus(${t.id},this.value)">
+          <option ${t.status==='Not Started'?'selected':''}>Not Started</option>
+          <option ${t.status==='Pending'?'selected':''}>Pending</option>
+          <option ${t.status==='In Progress'?'selected':''}>In Progress</option>
+          <option ${t.status==='Completed'?'selected':''}>Completed</option>
+        </select>
+      </td>
+    </tr>`).join('');
+}
+
+function updateStatus(id, status) {
+  taskList = taskList.map(t => t.id === id ? {...t, status} : t);
+  renderTasks();
+  showToast('Status updated');
+}
+
+function assignTask() {
+  const title = document.getElementById('taskTitle').value.trim();
+  if (!title) { showToast('Enter task title','error'); return; }
+  const vendor = document.getElementById('taskVendor').value;
+  const prio = document.getElementById('taskPrio').value;
+  const deadline = document.getElementById('taskDeadline').value || '2026-07-01';
+  taskList.push({ id: Date.now(), title, vendor, prio, deadline, status: 'Not Started' });
+  renderTasks();
+  document.getElementById('taskTitle').value = '';
+  showToast('Task assigned to ' + vendor);
+}
+
+function assignFromModal() {
+  const title = document.getElementById('mTaskTitle').value.trim();
+  if (!title) { showToast('Enter task title','error'); return; }
+  const vendor = document.getElementById('mTaskVendor').value;
+  const prio = document.getElementById('mTaskPrio').value;
+  const deadline = document.getElementById('mTaskDeadline').value || '2026-07-01';
+  taskList.push({ id: Date.now(), title, vendor, prio, deadline, status: 'Not Started' });
+  renderTasks();
+  closeModal('assignModal');
+  showToast('Task assigned');
+}
+
+renderTasks();
+</script>
+</body>
+</html>

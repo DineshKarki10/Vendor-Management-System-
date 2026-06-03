@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VMS — Vendor Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">VendorFlow</div>
+      <div class="logo-sub">Vendor Portal</div>
+    </div>
+    <div class="role-badge vendor"><i class="bi bi-building"></i> Vendor</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard','nav-dashboard')">
+        <i class="bi bi-grid-1x2-fill"></i> Dashboard
+      </div>
+      <div class="nav-section-label">Work</div>
+      <div class="nav-item" id="nav-tasks" onclick="navigate('tasks','nav-tasks')">
+        <i class="bi bi-list-task"></i> My Tasks
+      </div>
+      <div class="nav-item" id="nav-request" onclick="navigate('request','nav-request')">
+        <i class="bi bi-send-fill"></i> Request Task
+      </div>
+      <div class="nav-section-label">Finance</div>
+      <div class="nav-item" id="nav-invoices" onclick="navigate('invoices','nav-invoices')">
+        <i class="bi bi-receipt"></i> My Invoices
+      </div>
+      <div class="nav-item" id="nav-reports" onclick="navigate('reports','nav-reports')">
+        <i class="bi bi-bar-chart-fill"></i> Financial Report
+      </div>
+      <div class="nav-section-label">Legal</div>
+      <div class="nav-item" id="nav-contracts" onclick="navigate('contracts','nav-contracts')">
+        <i class="bi bi-file-earmark-text-fill"></i> Contracts
+      </div>
+      <div class="nav-item" id="nav-documents" onclick="navigate('documents','nav-documents')">
+        <i class="bi bi-folder-fill"></i> Documents
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="sidebar-avatar">TF</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-user-name">TechFlow Inc.</div>
+        <div class="user-role" id="sidebar-user-role">Vendor</div>
+      </div>
+      <button class="btn-logout" onclick="VMS.logout()"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary btn-sm" onclick="navigate('request','nav-request')">
+          <i class="bi bi-plus-lg"></i> New Request
+        </button>
+      </div>
+    </header>
+
+    <div class="page-body">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card blue">
+            <div class="stat-label">Active Tasks</div>
+            <div class="stat-value">4</div>
+            <div class="stat-sub">1 due this week</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Completed Tasks</div>
+            <div class="stat-value">23</div>
+            <div class="stat-sub">Last 90 days</div>
+          </div>
+          <div class="stat-card yellow">
+            <div class="stat-label">Pending Invoices</div>
+            <div class="stat-value">$20K</div>
+            <div class="stat-sub">2 invoices pending</div>
+          </div>
+          <div class="stat-card purple">
+            <div class="stat-label">Performance Score</div>
+            <div class="stat-value">92%</div>
+            <div class="stat-sub">↑ 4% this quarter</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="table-container">
+            <div class="table-header"><div class="table-title">Active Tasks</div></div>
+            <table>
+              <thead><tr><th>Task</th><th>Priority</th><th>Due</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Cloud Migration Phase 2</td><td><span class="badge badge-danger">High</span></td><td class="text-muted">Jun 10</td><td><span class="badge badge-info">In Progress</span></td></tr>
+                <tr><td>API Integration Setup</td><td><span class="badge badge-warning">Med</span></td><td class="text-muted">Jun 20</td><td><span class="badge badge-info">In Progress</span></td></tr>
+                <tr><td>Security Audit Support</td><td><span class="badge badge-warning">Med</span></td><td class="text-muted">Jun 28</td><td><span class="badge badge-muted">Pending</span></td></tr>
+                <tr><td>Monthly Reporting</td><td><span class="badge badge-muted">Low</span></td><td class="text-muted">Jun 30</td><td><span class="badge badge-muted">Not Started</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h4 style="font-size:14px;margin-bottom:16px">Performance Overview</h4>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="text-muted" style="font-size:13px">Delivery Speed</span><span style="font-size:13px;font-weight:700;color:var(--success)">95%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:95%;background:var(--success)"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="text-muted" style="font-size:13px">Quality Score</span><span style="font-size:13px;font-weight:700;color:var(--success)">88%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:88%;background:var(--success)"></div></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="text-muted" style="font-size:13px">Responsiveness</span><span style="font-size:13px;font-weight:700;color:var(--accent)">91%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:91%;background:var(--accent)"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="text-muted" style="font-size:13px">SLA Compliance</span><span style="font-size:13px;font-weight:700;color:var(--warning)">79%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar" style="width:79%;background:var(--warning)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY TASKS -->
+      <div class="panel" id="panel-tasks">
+        <div class="section-heading"><h3>My Tasks</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Task Title</th><th>Assigned By</th><th>Priority</th><th>Deadline</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">Cloud Migration Phase 2</td><td class="text-muted">Sarah Chen</td><td><span class="badge badge-danger">High</span></td><td class="text-muted">Jun 10, 2026</td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-success btn-sm" onclick="showToast('Marked complete!')">Mark Done</button></td></tr>
+              <tr><td style="font-weight:500">API Integration Setup</td><td class="text-muted">Sarah Chen</td><td><span class="badge badge-warning">Medium</span></td><td class="text-muted">Jun 20, 2026</td><td><span class="badge badge-info">In Progress</span></td><td><button class="btn btn-success btn-sm" onclick="showToast('Marked complete!')">Mark Done</button></td></tr>
+              <tr><td style="font-weight:500">Security Audit Support</td><td class="text-muted">Admin</td><td><span class="badge badge-warning">Medium</span></td><td class="text-muted">Jun 28, 2026</td><td><span class="badge badge-muted">Pending</span></td><td><button class="btn btn-primary btn-sm" onclick="showToast('Task started!')">Start</button></td></tr>
+              <tr><td style="font-weight:500">Monthly Reporting</td><td class="text-muted">Sarah Chen</td><td><span class="badge badge-muted">Low</span></td><td class="text-muted">Jun 30, 2026</td><td><span class="badge badge-muted">Not Started</span></td><td><button class="btn btn-primary btn-sm" onclick="showToast('Task started!')">Start</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REQUEST TASK -->
+      <div class="panel" id="panel-request">
+        <div class="section-heading"><h3>Request a Task / Service</h3></div>
+        <div class="card" style="max-width:600px">
+          <div class="form-group"><label class="form-label">Task Title</label><input type="text" class="form-control" id="reqTitle" placeholder="e.g. Cloud infrastructure setup"></div>
+          <div class="grid-2">
+            <div class="form-group"><label class="form-label">Category</label>
+              <select class="form-control" id="reqCat">
+                <option>Infrastructure</option><option>Security</option><option>Software</option><option>Support</option><option>Consulting</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Priority</label>
+              <select class="form-control" id="reqPrio">
+                <option>Low</option><option>Medium</option><option selected>High</option><option>Critical</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Description</label>
+            <textarea class="form-control" id="reqDesc" rows="4" placeholder="Describe the task in detail..."></textarea>
+          </div>
+          <div class="form-group"><label class="form-label">Requested Deadline</label><input type="date" class="form-control" id="reqDeadline"></div>
+          <div class="form-group"><label class="form-label">Estimated Budget ($)</label><input type="number" class="form-control" id="reqBudget" placeholder="5000"></div>
+          <button class="btn btn-primary" onclick="submitRequest()"><i class="bi bi-send"></i> Submit Request</button>
+        </div>
+        <hr class="divider" style="max-width:600px">
+        <h4 style="font-size:14px;margin-bottom:12px">Recent Requests</h4>
+        <div class="table-container" style="max-width:600px" id="reqTable">
+          <table>
+            <thead><tr><th>Title</th><th>Priority</th><th>Submitted</th><th>Status</th></tr></thead>
+            <tbody id="reqTableBody">
+              <tr><td>Network Expansion</td><td><span class="badge badge-warning">Medium</span></td><td class="text-muted">2026-05-22</td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr><td>Backup System Upgrade</td><td><span class="badge badge-danger">High</span></td><td class="text-muted">2026-05-30</td><td><span class="badge badge-info">Under Review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INVOICES -->
+      <div class="panel" id="panel-invoices">
+        <div class="section-heading"><h3>My Invoices</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('submitInvoiceModal')"><i class="bi bi-plus-lg"></i> Submit Invoice</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Invoice ID</th><th>Contract</th><th>Amount</th><th>Due Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent);font-weight:600">INV-081</td><td class="text-muted">C-041</td><td>$10,000</td><td class="text-muted">Jun 15, 2026</td><td><span class="badge badge-info">Pending</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">INV-084</td><td class="text-muted">C-041</td><td>$10,000</td><td class="text-muted">Jul 15, 2026</td><td><span class="badge badge-info">Pending</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">INV-079</td><td class="text-muted">C-041</td><td>$10,000</td><td class="text-muted">May 15, 2026</td><td><span class="badge badge-success">Paid</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FINANCIAL REPORT -->
+      <div class="panel" id="panel-reports">
+        <div class="section-heading"><h3>Financial Report</h3></div>
+        <div class="stat-grid">
+          <div class="stat-card green"><div class="stat-label">Total Earned (YTD)</div><div class="stat-value">$120K</div><div class="stat-sub">Across 3 contracts</div></div>
+          <div class="stat-card blue"><div class="stat-label">Pending Payments</div><div class="stat-value">$20K</div><div class="stat-sub">2 invoices</div></div>
+          <div class="stat-card yellow"><div class="stat-label">Avg Payment Cycle</div><div class="stat-value">18 days</div><div class="stat-sub">Industry avg: 22 days</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h4 style="font-size:14px;margin-bottom:16px">Monthly Earnings</h4>
+            <div id="earningsChart" style="display:flex;align-items:flex-end;gap:6px;height:120px"></div>
+            <div style="display:flex;gap:6px;margin-top:6px;font-size:10px;color:var(--muted)">
+              <span style="flex:1;text-align:center">Jan</span><span style="flex:1;text-align:center">Feb</span><span style="flex:1;text-align:center">Mar</span>
+              <span style="flex:1;text-align:center">Apr</span><span style="flex:1;text-align:center">May</span><span style="flex:1;text-align:center">Jun</span>
+            </div>
+          </div>
+          <div class="card">
+            <h4 style="font-size:14px;margin-bottom:16px">Payment History</h4>
+            <table>
+              <thead><tr><th>Month</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>May 2026</td><td>$10,000</td><td><span class="badge badge-success">Paid</span></td></tr>
+                <tr><td>Apr 2026</td><td>$10,000</td><td><span class="badge badge-success">Paid</span></td></tr>
+                <tr><td>Mar 2026</td><td>$10,000</td><td><span class="badge badge-success">Paid</span></td></tr>
+                <tr><td>Feb 2026</td><td>$10,000</td><td><span class="badge badge-success">Paid</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTRACTS -->
+      <div class="panel" id="panel-contracts">
+        <div class="section-heading"><h3>My Contracts</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Contract ID</th><th>Description</th><th>Value</th><th>Start</th><th>Expiry</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent);font-weight:600">C-041</td><td>Cloud Infrastructure Services</td><td>$120,000</td><td class="text-muted">Jan 1, 2025</td><td class="text-muted">Dec 31, 2026</td><td><span class="badge badge-success">Active</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">C-039</td><td>Support & Maintenance SLA</td><td>$36,000</td><td class="text-muted">Jul 1, 2024</td><td class="text-muted">Jun 30, 2025</td><td><span class="badge badge-danger">Expired</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS -->
+      <div class="panel" id="panel-documents">
+        <div class="section-heading"><h3>Documents</h3>
+          <button class="btn btn-primary btn-sm" onclick="showToast('Upload feature coming soon', 'info')"><i class="bi bi-upload"></i> Upload</button>
+        </div>
+        <div class="grid-3" id="docGrid"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Submit Invoice Modal -->
+<div class="modal-overlay" id="submitInvoiceModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Submit Invoice</div>
+      <button class="modal-close" onclick="closeModal('submitInvoiceModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="form-group"><label class="form-label">Contract</label>
+      <select class="form-control"><option>C-041 — Cloud Infrastructure</option></select>
+    </div>
+    <div class="grid-2">
+      <div class="form-group"><label class="form-label">Amount ($)</label><input type="number" class="form-control" placeholder="10000"></div>
+      <div class="form-group"><label class="form-label">Due Date</label><input type="date" class="form-control"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" rows="3" placeholder="Service period, deliverables..."></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal('submitInvoiceModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('submitInvoiceModal');showToast('Invoice submitted!')">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script src="../vms-auth.js"></script>
+<script>
+const user = VMS.requireAuth('vendor');
+if (user) VMS.renderSidebarUser(user);
+VMS.initAppLayout();
+
+const titles = {
+  dashboard:'Dashboard', tasks:'My Tasks', request:'Request Task',
+  invoices:'My Invoices', reports:'Financial Report', contracts:'My Contracts', documents:'Documents'
+};
+
+function navigate(panel, navId) {
+  VMS.navigate(panel, navId, titles);
+}
+
+function submitRequest() {
+  const title = document.getElementById('reqTitle').value.trim();
+  if (!title) { showToast('Enter a task title', 'error'); return; }
+  const tbody = document.getElementById('reqTableBody');
+  const prio = document.getElementById('reqPrio').value;
+  const colors = { Low:'badge-muted', Medium:'badge-warning', High:'badge-danger', Critical:'badge-danger' };
+  const row = document.createElement('tr');
+  row.innerHTML = `<td>${title}</td><td><span class="badge ${colors[prio]}">${prio}</span></td><td class="text-muted">${new Date().toISOString().split('T')[0]}</td><td><span class="badge badge-info">Submitted</span></td>`;
+  tbody.prepend(row);
+  document.getElementById('reqTitle').value = '';
+  showToast('Request submitted to manager');
+}
+
+// Render documents
+const docs = [
+  { name:'Contract C-041 (Signed)', type:'pdf', date:'Jan 1, 2025' },
+  { name:'NDA Agreement',           type:'pdf', date:'Dec 5, 2024' },
+  { name:'Technical Specs v2',      type:'doc', date:'Mar 10, 2026' },
+  { name:'Invoice Template',        type:'xls', date:'Feb 2, 2026'  },
+  { name:'Service Schedule',        type:'pdf', date:'Jan 15, 2026' },
+];
+
+const typeColors = { pdf:'var(--danger)', doc:'var(--accent)', xls:'var(--success)' };
+document.getElementById('docGrid').innerHTML = docs.map(d => `
+  <div class="card" style="display:flex;align-items:center;gap:12px;cursor:pointer" onclick="showToast('Opening document...')">
+    <div style="width:42px;height:42px;border-radius:10px;background:${typeColors[d.type]}22;color:${typeColors[d.type]};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">
+      <i class="bi bi-file-earmark-fill"></i>
+    </div>
+    <div style="flex:1;overflow:hidden">
+      <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.name}</div>
+      <div class="text-muted" style="font-size:11px">${d.type.toUpperCase()} · ${d.date}</div>
+    </div>
+  </div>`).join('');
+
+// Mini bar chart
+const months = [8000, 12000, 10000, 9000, 11000, 10000];
+const maxVal = Math.max(...months);
+document.getElementById('earningsChart').innerHTML = months.map((v, i) => `
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+    <div style="font-size:10px;color:var(--muted)">$${(v/1000).toFixed(0)}k</div>
+    <div style="width:100%;background:${i===5?'var(--accent)':'rgba(79,142,247,.3)'};border-radius:4px 4px 0 0;height:${(v/maxVal)*90}px;transition:height .4s"></div>
+  </div>`).join('');
+</script>
+</body>
+</html>

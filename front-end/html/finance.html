@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VMS — Finance Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">VendorFlow</div>
+      <div class="logo-sub">Finance Office</div>
+    </div>
+    <div class="role-badge finance"><i class="bi bi-cash-stack"></i> Finance</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" id="nav-dashboard" onclick="navigate('dashboard','nav-dashboard')">
+        <i class="bi bi-graph-up"></i> Dashboard
+      </div>
+      <div class="nav-section-label">Finance</div>
+      <div class="nav-item" id="nav-reports" onclick="navigate('reports','nav-reports')">
+        <i class="bi bi-bar-chart-fill"></i> Financial Reports
+      </div>
+      <div class="nav-item" id="nav-invoices" onclick="navigate('invoices','nav-invoices')">
+        <i class="bi bi-receipt"></i> Invoices
+      </div>
+      <div class="nav-item" id="nav-payments" onclick="navigate('payments','nav-payments')">
+        <i class="bi bi-currency-dollar"></i> Payments
+      </div>
+      <div class="nav-item" id="nav-contracts" onclick="navigate('contracts','nav-contracts')">
+        <i class="bi bi-file-earmark-text-fill"></i> Contracts
+      </div>
+      <div class="nav-item" id="nav-vendors" onclick="navigate('vendors','nav-vendors')">
+        <i class="bi bi-building"></i> Vendor Finance
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar" id="sidebar-avatar">OH</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-user-name">Omar Hassan</div>
+        <div class="user-role" id="sidebar-user-role">Finance</div>
+      </div>
+      <button class="btn-logout" onclick="VMS.logout()"><i class="bi bi-box-arrow-right"></i></button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary btn-sm" onclick="navigate('reports','nav-reports')">
+          <i class="bi bi-plus-lg"></i> New Report
+        </button>
+      </div>
+    </header>
+
+    <div class="page-body">
+      <div class="panel active" id="panel-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card green"><div class="stat-label">Total Revenue</div><div class="stat-value">$1.24M</div><div class="stat-sub">This fiscal year</div></div>
+          <div class="stat-card blue"><div class="stat-label">Pending Payments</div><div class="stat-value">$120K</div><div class="stat-sub">5 invoices pending</div></div>
+          <div class="stat-card yellow"><div class="stat-label">Budget Utilization</div><div class="stat-value">78%</div><div class="stat-sub">Target 85%</div></div>
+          <div class="stat-card purple"><div class="stat-label">Vendor Spend</div><div class="stat-value">$430K</div><div class="stat-sub">Last 30 days</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="section-heading"><h3>Recent Financial Activity</h3></div>
+            <ul class="timeline" style="padding:16px 0; list-style:none;">
+              <li style="display:flex;gap:12px; margin-bottom:16px;">
+                <div class="tl-dot" style="background:rgba(79,142,247,.15);color:#4f8ef7"><i class="bi bi-wallet2"></i></div>
+                <div><div class="tl-title">Invoice INV-091 approved</div><div class="tl-time text-muted">Today</div></div>
+              </li>
+              <li style="display:flex;gap:12px; margin-bottom:16px;">
+                <div class="tl-dot" style="background:rgba(245,166,35,.15);color:#f5a623"><i class="bi bi-currency-dollar"></i></div>
+                <div><div class="tl-title">Payment scheduled for TechFlow</div><div class="tl-time text-muted">Tomorrow</div></div>
+              </li>
+              <li style="display:flex;gap:12px; margin-bottom:16px;">
+                <div class="tl-dot" style="background:rgba(46,204,122,.15);color:#2ecc7a"><i class="bi bi-check-circle-fill"></i></div>
+                <div><div class="tl-title">Cost savings reviewed for contract C-041</div><div class="tl-time text-muted">2 days ago</div></div>
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="section-heading"><h3>Cash Flow Summary</h3></div>
+            <div style="display:flex;justify-content:space-between;gap:12px;">
+              <div style="flex:1; background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                <div class="stat-label">Received</div>
+                <div class="stat-value">$840K</div>
+                <div class="stat-sub">Paid on time</div>
+              </div>
+              <div style="flex:1; background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+                <div class="stat-label">Due</div>
+                <div class="stat-value">$120K</div>
+                <div class="stat-sub">Due in 14 days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-reports">
+        <div class="section-heading"><h3>Financial Reports</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Report</th><th>Period</th><th>Status</th><th>Created</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">Quarterly Vendor Spend</td><td>Q2 2026</td><td><span class="badge badge-info">Draft</span></td><td class="text-muted">Jun 1</td></tr>
+              <tr><td style="font-weight:500">Payment Aging</td><td>May 2026</td><td><span class="badge badge-success">Final</span></td><td class="text-muted">May 30</td></tr>
+              <tr><td style="font-weight:500">Contract Profitability</td><td>YTD</td><td><span class="badge badge-success">Final</span></td><td class="text-muted">May 25</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-invoices">
+        <div class="section-heading"><h3>Invoices</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Invoice</th><th>Vendor</th><th>Amount</th><th>Due</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">INV-091</td><td>TechFlow Inc.</td><td>$32,000</td><td class="text-muted">Jun 12</td><td><span class="badge badge-info">Pending</span></td></tr>
+              <tr><td style="font-weight:500">INV-088</td><td>NetServe Co</td><td>$18,000</td><td class="text-muted">May 20</td><td><span class="badge badge-success">Paid</span></td></tr>
+              <tr><td style="font-weight:500">INV-084</td><td>CloudHost Ltd</td><td>$25,000</td><td class="text-muted">Jul 1</td><td><span class="badge badge-warning">Awaiting</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-payments">
+        <div class="section-heading"><h3>Payments</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Amount</th><th>Type</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td>$32,000</td><td>Bank Transfer</td><td><span class="badge badge-info">Scheduled</span></td></tr>
+              <tr><td style="font-weight:500">CloudHost Ltd</td><td>$18,000</td><td>Cheque</td><td><span class="badge badge-success">Completed</span></td></tr>
+              <tr><td style="font-weight:500">DataSoft LLC</td><td>$15,000</td><td>Online</td><td><span class="badge badge-warning">Processing</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-contracts">
+        <div class="section-heading"><h3>Contracts</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>ID</th><th>Vendor</th><th>Value</th><th>Expiry</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td style="color:var(--accent);font-weight:600">C-041</td><td>TechFlow Inc.</td><td>$120,000</td><td class="text-muted">Dec 31, 2026</td><td><span class="badge badge-success">Active</span></td></tr>
+              <tr><td style="color:var(--accent);font-weight:600">C-042</td><td>CloudHost Ltd</td><td>$48,000</td><td class="text-muted">May 31, 2026</td><td><span class="badge badge-warning">Expiring</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-vendors">
+        <div class="section-heading"><h3>Vendor Finance</h3></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Vendor</th><th>Outstanding</th><th>Paid</th><th>Risk</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500">TechFlow Inc.</td><td>$32,000</td><td>$88,000</td><td><span class="badge badge-info">Low</span></td></tr>
+              <tr><td style="font-weight:500">CloudHost Ltd</td><td>$18,000</td><td>$30,000</td><td><span class="badge badge-warning">Medium</span></td></tr>
+              <tr><td style="font-weight:500">DataSoft LLC</td><td>$14,000</td><td>$22,000</td><td><span class="badge badge-danger">High</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../vms-auth.js"></script>
+<script>
+  const user = VMS.requireAuth('finance');
+  if (user) VMS.renderSidebarUser(user);
+  VMS.initAppLayout();
+
+  const titles = {
+    dashboard: 'Dashboard',
+    reports: 'Financial Reports',
+    invoices: 'Invoices',
+    payments: 'Payments',
+    contracts: 'Contracts',
+    vendors: 'Vendor Finance'
+  };
+
+  function navigate(panel, navId) {
+    VMS.navigate(panel, navId, titles);
+  }
+</script>
+</body>
+</html>
