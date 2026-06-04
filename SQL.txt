@@ -1,0 +1,115 @@
+CREATE DATABASE IF NOT EXISTS vms_db;
+USE vms_db;
+
+CREATE TABLE USER (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'manager', 'staff') NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE VENDOR (
+    vendor_id INT PRIMARY KEY AUTO_INCREMENT,
+    company_name VARCHAR(150) NOT NULL,
+    contact_name VARCHAR(100),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address TEXT,
+    vendor_type ENUM('supplier', 'service_provider', 'contractor') NOT NULL,
+    status ENUM('pending', 'approved', 'rejected', 'blacklisted') DEFAULT 'pending',
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approved_by INT,
+    FOREIGN KEY (approved_by) REFERENCES USER(user_id)
+);
+
+CREATE TABLE CONTRACT (
+    contract_id INT PRIMARY KEY AUTO_INCREMENT,
+    vendor_id INT NOT NULL,
+    created_by INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    renewal_date DATE,
+    status ENUM('draft', 'active', 'expired', 'terminated') DEFAULT 'draft',
+    terms TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vendor_id) REFERENCES VENDOR(vendor_id),
+    FOREIGN KEY (created_by) REFERENCES USER(user_id)
+);
+
+CREATE TABLE INVOICE (
+    invoice_id INT PRIMARY KEY AUTO_INCREMENT,
+    vendor_id INT NOT NULL,
+    contract_id INT,
+    invoice_number VARCHAR(50) NOT NULL UNIQUE,
+    amount DECIMAL(12, 2) NOT NULL,
+    due_date DATE,
+    status ENUM('unpaid', 'paid', 'overdue', 'cancelled') DEFAULT 'unpaid',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (vendor_id) REFERENCES VENDOR(vendor_id),
+    FOREIGN KEY (contract_id) REFERENCES CONTRACT(contract_id)
+);
+
+CREATE TABLE PAYMENT (
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,
+    invoice_id INT NOT NULL,
+    processed_by INT NOT NULL,
+    amount_paid DECIMAL(12, 2) NOT NULL,
+    payment_date DATE NOT NULL,
+    method ENUM('bank_transfer', 'cheque', 'cash', 'online') NOT NULL,
+    reference_number VARCHAR(100),
+    FOREIGN KEY (invoice_id) REFERENCES INVOICE(invoice_id),
+    FOREIGN KEY (processed_by) REFERENCES USER(user_id)
+);
+
+CREATE TABLE PURCHASE_ORDER (
+    po_id INT PRIMARY KEY AUTO_INCREMENT,
+    vendor_id INT NOT NULL,
+    created_by INT NOT NULL,
+    po_number VARCHAR(50) NOT NULL UNIQUE,
+    total_amount DECIMAL(12, 2) NOT NULL,
+    order_date DATE NOT NULL,
+    status ENUM('draft', 'sent', 'acknowledged', 'completed', 'cancelled') DEFAULT 'draft',
+    FOREIGN KEY (vendor_id) REFERENCES VENDOR(vendor_id),
+    FOREIGN KEY (created_by) REFERENCES USER(user_id)
+);
+
+CREATE TABLE PERFORMANCE_REVIEW (
+    review_id INT PRIMARY KEY AUTO_INCREMENT,
+    vendor_id INT NOT NULL,
+    reviewed_by INT NOT NULL,
+    score_delivery INT CHECK (score_delivery BETWEEN 1 AND 10),
+    score_quality INT CHECK (score_quality BETWEEN 1 AND 10),
+    score_responsiveness INT CHECK (score_responsiveness BETWEEN 1 AND 10),
+    overall_score DECIMAL(4, 2),
+    comments TEXT,
+    review_date DATE NOT NULL,
+    FOREIGN KEY (vendor_id) REFERENCES VENDOR(vendor_id),
+    FOREIGN KEY (reviewed_by) REFERENCES USER(user_id)
+);
+
+CREATE TABLE NOTIFICATION (
+    notification_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    type ENUM('info', 'warning', 'alert', 'reminder') DEFAULT 'info',
+    is_read BOOLEAN DEFAULT FALSE,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES USER(user_id)
+);
+
+CREATE TABLE DOCUMENT (
+    document_id INT PRIMARY KEY AUTO_INCREMENT,
+    contract_id INT NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    doc_type ENUM('contract', 'amendment', 'invoice', 'report', 'other') NOT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    uploaded_by INT NOT NULL,
+    FOREIGN KEY (contract_id) REFERENCES CONTRACT(contract_id),
+    FOREIGN KEY (uploaded_by) REFERENCES USER(user_id)
+);
